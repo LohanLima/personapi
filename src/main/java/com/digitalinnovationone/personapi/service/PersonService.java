@@ -1,12 +1,12 @@
 package com.digitalinnovationone.personapi.service;
 
 
-import com.digitalinnovationone.personapi.dto.MessageResponseDTO;
+import com.digitalinnovationone.personapi.dto.request.PersonDTO;
+import com.digitalinnovationone.personapi.dto.response.MessageResponseDTO;
 import com.digitalinnovationone.personapi.entity.Person;
 import com.digitalinnovationone.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class PersonService {
@@ -17,8 +17,16 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public MessageResponseDTO createPerson(Person person) {
-        Person savePerson = personRepository.save(person);
+    public MessageResponseDTO createPerson(PersonDTO personDTO) {
+
+        Person personToSave = Person.builder()
+                .firstName(personDTO.getFirstName())
+                .lastName(personDTO.getFirstName())
+                .birthData(personDTO.getBirthData())
+                .phones(personDTO.getPhones())
+                .build();
+
+        Person savePerson = personRepository.save(personDTO);
         return MessageResponseDTO
                 .builder()
                 .message("Created Person with ID" + savePerson.getId())
